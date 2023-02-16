@@ -1,1 +1,13 @@
-export const apiUrl = "https://74828fb8-83ac-4a82-b786-b6aa78b0bd5f-dev.e1-us-east-azure.preview-dv.choreoapis.dev/oubo/issues-api/1.0.0";
+import config from "./config.json";
+
+export const authConfig = {
+    signInRedirectURL: config.signInRedirectURL,
+    signOutRedirectURL: config.signOutRedirectURL,
+    clientID: config.clientID,
+    baseUrl: config.baseUrl,
+    scope: config.scope,
+    resourceServerURLs: [ config.APIUrl ],
+    prompt: "consent"
+};
+
+export const apiUrl = config.APIUrl;
