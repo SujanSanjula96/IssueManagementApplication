@@ -1,0 +1,1 @@
+export const apiUrl = "https://74828fb8-83ac-4a82-b786-b6aa78b0bd5f-dev.e1-us-east-azure.preview-dv.choreoapis.dev/oubo/issues-api/1.0.0";
