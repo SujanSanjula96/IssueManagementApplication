@@ -14,7 +14,7 @@ import { MuiSnackbar } from "../components/snackbar";
 import Actions from '../components/actions';
 import { useUser } from '../providers/UserProvider';
 import CopyToClipboardButton from "../components/copy-to-clipboard";
-import { apiUrl } from "../config";
+import { apiUrl, closePermission } from "../config";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -95,7 +95,7 @@ const HomePage = () => {
   const [ alertSeverity, setAlertSeverity ] = useState<any>(undefined);
 
   const scopes = useUser().scopes;
-  const canClose = true;//scopes.includes("urn:bootcampers:issuesapi:close_issue");
+  const canClose = scopes.includes(closePermission);
 
   const appList = [{name: "Issue 1"},{name: "Issue 2"},{name: "Issue 3"}];
 

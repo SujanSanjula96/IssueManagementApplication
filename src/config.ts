@@ -11,3 +11,4 @@ export const authConfig = {
 };
 
 export const apiUrl = config.APIUrl;
+export const closePermission = config.closePermssion;
