@@ -1,4 +1,4 @@
-import React, {FunctionComponent, PropsWithChildren, useContext, useState} from "react";
+import React, {FunctionComponent, PropsWithChildren, useContext} from "react";
 
 const userContext = React.createContext(null);
 
@@ -7,7 +7,8 @@ interface IUserContextProps {
 }
 
 interface IUserContext {
-    scopes: string;
+    scopes: string[];
+    groups: string[];
     email: string;
     displayName: string;
 }

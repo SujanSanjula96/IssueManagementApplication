@@ -1,18 +1,13 @@
-import { Box, Button, IconButton, Popover, Tooltip, Typography } from '@mui/material';
-import { Delete, Edit, PanoramaSharp, Preview } from '@mui/icons-material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Box, Button, Popover, Tooltip, Typography } from '@mui/material';
 import { useAuthContext } from '@asgardeo/auth-react';
-import { useEffect, useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { useState } from 'react';
+import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import React from 'react';
 import { apiUrl } from '../config';
 
 
 const Actions = ( props ) => {
 
-  const history = useHistory();
-  const location = useLocation();
   const { httpRequest } = useAuthContext();
 
   const [ openDialog, setOpenDialog ] = useState<boolean>(false);
@@ -115,23 +110,23 @@ const Actions = ( props ) => {
             
       </Box>
             <Popover
-            id="mouse-over-popover"
-            sx={{
-              pointerEvents: 'none',
-            }}
-            open={open}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            onClose={handlePopoverClose}
-            disableRestoreFocus
-          >
+              id="mouse-over-popover"
+              sx={{
+                pointerEvents: 'none',
+              }}
+              open={open}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              onClose={handlePopoverClose}
+              disableRestoreFocus
+            >
             <Typography sx={{ p: 1 }}>You are not authorized to close the issue.</Typography>
           </Popover>
           </>

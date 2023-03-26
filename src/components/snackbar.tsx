@@ -14,7 +14,7 @@ const SnackbarAlert = forwardRef<HTMLDivElement, AlertProps>(
   }
 )
 
-export const MuiSnackbar = (props : SnackbarProps) => {
+export const SnackbarComponent = (props : SnackbarProps) => {
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -26,16 +26,10 @@ export const MuiSnackbar = (props : SnackbarProps) => {
     props.setOpenAlert(false)
   }
 
-  function TransitionUp(props) {
-    return <Slide {...props} direction="up" />;
-  }
-
-  
   return (
     <>
       <Snackbar open={props.openAlert} autoHideDuration={6000} onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        /*TransitionComponent={TransitionUp} */
       >
         <SnackbarAlert onClose={handleClose} severity={props.severity} >
           {props.message}

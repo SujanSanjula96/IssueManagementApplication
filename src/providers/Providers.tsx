@@ -8,9 +8,7 @@ interface Props {
 export default function Providers({ children }: Props) {
 
   return (
-    <AuthProvider
-      config={ authConfig }
-    >
+    <AuthProvider config={ authConfig }>
         {children}
     </AuthProvider>
   );

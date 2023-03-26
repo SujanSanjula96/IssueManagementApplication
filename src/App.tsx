@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Login from './login/pages/Login';
+import Login from './Pages/Login';
 import Providers from './providers';
 import { Dashboard } from "./layout/dashboard";
 import { SecureRoute, useAuthContext } from '@asgardeo/auth-react';

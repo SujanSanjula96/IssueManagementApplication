@@ -1,21 +1,15 @@
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Hooks, useAuthContext, SecureRoute } from "@asgardeo/auth-react";
+import { useAuthContext } from "@asgardeo/auth-react";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CircularProgress } from '@mui/material';
-
-interface LocationDefinition {
-  state: { returnToUrl: string };
-}
 
 function Login() {
 
   const history = useHistory();
-  const location: LocationDefinition = useLocation();
-  const returnToUrl = location.state?.returnToUrl || '';
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
   const { state, signIn, signOut, on } = useAuthContext();
@@ -24,7 +18,6 @@ function Login() {
     if (!state?.isAuthenticated) {
         return;
     } else {
-      
       history.replace("issues");
     }
   }, [ state?.isAuthenticated ]);
@@ -56,7 +49,6 @@ function Login() {
             sx={{width:600, height:400, backgroundColor:'#eeeeee', borderRadius:5}}
           >
             <Box >
-
               <Typography variant='h4' sx={{mb:2}}>
                 ISSUE MANAGEMENT
               </Typography>
@@ -69,9 +61,7 @@ function Login() {
                 justifyContent="center"
                 alignItems="center"
               >
-                <Box>
                   {loginButton}
-                </Box>
               </Box>
 
             </Box>

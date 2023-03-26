@@ -1,16 +1,16 @@
 {
     "clientID": "",
-    "baseUrl": "https://dev.api.asgardeo.io/t/<orgName>",
+    "baseUrl": "https://api.asgardeo.io/t/sujan11",
     "signInRedirectURL": "http://localhost:3000",
     "signOutRedirectURL": "http://localhost:3000",
     "scope": [
         "openid",
         "profile",
         "groups", 
-        "urn:bootcampers:issuesapi:create_issue",
-        "urn:bootcampers:issuesapi:close_issue",
-        "urn:bootcampers:issuesapi:list_issues"
+        "urn:sujan11:issueapivcr:create_issue",
+        "urn:sujan11:issueapivcr:close_issue",
+        "urn:sujan11:issueapivcr:list_issues"
     ],
-    "APIUrl": "https://74828fb8-83ac-4a82-b786-b6aa78b0bd5f-dev.e1-us-east-azure.preview-dv.choreoapis.dev/oubo/issues-api/1.0.0",
-    "closePermssion": "urn:bootcampers:issuesapi:close_issue"
+    "APIUrl": "https://7311456e-0678-4009-aa78-55b72e1b3184-prod.e1-us-east-azure.choreoapis.dev/xylr/issueapi-vcr/1.0.0",
+    "closePermssion": "urn:sujan11:issueapivcr:close_issue"
 }

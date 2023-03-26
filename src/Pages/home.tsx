@@ -1,19 +1,15 @@
 import { useEffect, useState, useMemo } from "react";
 
-import { Route, Switch } from 'react-router-dom';
 import  { useAuthContext } from '@asgardeo/auth-react';
-import { UserProvider } from '../providers/UserProvider';
 import jwt from 'jwt-decode'
-import ReactJson from "react-json-view";
-import { Avatar, Box, Button, Modal, TextField, Typography } from "@mui/material";
-import JSONModal from "../components/JSONModal";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import JSONModal from "../components/jsonModal";
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import { grey } from '@mui/material/colors';
-import { MuiSnackbar } from "../components/snackbar";
+import { SnackbarComponent } from "../components/snackbar";
 
 import Actions from '../components/actions';
 import { useUser } from '../providers/UserProvider';
-import CopyToClipboardButton from "../components/copy-to-clipboard";
 import { apiUrl, closePermission } from "../config";
 
 const style = {
@@ -56,22 +52,6 @@ interface AccessTokenInterface {
   username: string;
 }
 
-interface DecodedAccessTokenInterface {
-  aud?: [],
-  aut?: string,
-  azp?: string,
-  exp?: number,
-  iat?: number,
-  idp_claims?: {},
-  iss?: string,
-  jti?: string,
-  nbf?: number,
-  organization?: OrganizationInterface,
-  organizations?: [],
-  scope?: string,
-  sub?: string
-}
-
 const HomePage = () => {
 
     const [pageSize, setPageSize] = useState(5);
@@ -94,8 +74,10 @@ const HomePage = () => {
   const [ alertMessage, setAlertMessage ] = useState<string>(undefined);
   const [ alertSeverity, setAlertSeverity ] = useState<any>(undefined);
 
+  const data = useUser();
   const scopes = useUser().scopes;
   const canClose = scopes.includes(closePermission);
+  const groups: string[] = useUser().groups;
 
   const appList = [{name: "Issue 1"},{name: "Issue 2"},{name: "Issue 3"}];
 
@@ -131,8 +113,6 @@ const HomePage = () => {
       const getData = async () => {
         const accessToken = await getAccessToken();
         const decodedAccessToken = jwt(accessToken) as AccessTokenInterface;
-        //const sessionData = JSON.parse(sessionStorage.getItem("session_data-instance_0"));
-        //const accessTokenIDP = sessionData.access_token;
         const decodedIDToken = await getDecodedIDToken();//jwt(accessTokenIDP);
         setAccessToken(accessToken);
         setDecodedAccessToken(decodedAccessToken);
@@ -211,7 +191,7 @@ const HomePage = () => {
             sx={{width:"100%"}}>
             <Box m={2} sx={{width:"100%",  height:500} }>
                 <Button variant='contained' sx={{mt:3}} onClick={() => {setOpenNewIssue(true)}} >
-                    New Issue
+                    + New Issue
                 </Button>
                 <Box m={2}>
                     <DataGrid
@@ -277,18 +257,16 @@ const HomePage = () => {
                 justifyContent="center"
                 alignItems="center"
                 sx={{height:100}}>
-                <JSONModal title="Decoded ID Token" buttonLabel="Decoded ID Token" json={decodedIDToken}/>
-                <JSONModal title="Decoded Access Token" buttonLabel="Decoded Access Token" json={decodedAccessToken}/>
-                < CopyToClipboardButton copyString={accessToken} />
+                <JSONModal title="User Info" buttonLabel="User Info" json={data}/>
             </Box>
 
         </Box>
-        <MuiSnackbar openAlert={openAlert} 
-        setOpenAlert={setOpenAlert} 
-        message={alertMessage}
-        severity={alertSeverity}
-      />
-
+        <SnackbarComponent
+          openAlert={openAlert} 
+          setOpenAlert={setOpenAlert} 
+          message={alertMessage}
+          severity={alertSeverity}
+        />
     </Box>
     
 
@@ -317,12 +295,9 @@ const HomePage = () => {
             justifyContent="center"
             alignItems="center"
             sx={{height:100}}>
-            <JSONModal title="Decoded ID Token" buttonLabel="Decoded ID Token" json={decodedIDToken}/>
-            <JSONModal title="Decoded Access Token" buttonLabel="Decoded Access Token" json={decodedAccessToken}/>
-            < CopyToClipboardButton copyString={accessToken} />
+            <JSONModal title="Decoded ID Token" buttonLabel="Decoded ID Token" json={data}/>
         </Box>
-
-        </Box>
+      </Box>
         </>
   
     )

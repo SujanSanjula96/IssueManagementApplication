@@ -1,4 +1,5 @@
-import { Box,
+import {
+    Box,
     AppBar,
     Toolbar,
     Typography,
@@ -6,7 +7,6 @@ import { Box,
     Stack,
     Avatar
   } from '@mui/material';
-
 
 import { useAuthContext } from '@asgardeo/auth-react';
 import { useUser } from '../providers/UserProvider';

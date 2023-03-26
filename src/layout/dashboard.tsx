@@ -1,51 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Layout } from './layout';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import  { useAuthContext } from '@asgardeo/auth-react';
 import { UserProvider } from '../providers/UserProvider';
-import jwt from 'jwt-decode'
 import HomePage from '../Pages/home';
-
-
-interface OrganizationInterface {
-  handle?: string,
-  uuid?: string
-}
-
-interface DecodedAccessTokenInterface {
-  aud?: [],
-  aut?: string,
-  azp?: string,
-  exp?: number,
-  iat?: number,
-  idp_claims?: {},
-  iss?: string,
-  jti?: string,
-  nbf?: number,
-  organization?: OrganizationInterface,
-  organizations?: [],
-  scope?: string,
-  sub?: string
-}
+import { CircularProgress } from '@mui/material';
 
 export const Dashboard = () => {
 
-  const { state, getAccessToken, getBasicUserInfo } = useAuthContext();
+  const { state, getBasicUserInfo} = useAuthContext();
 
-  const [ isOrganizationLoaded, setIsOrganizationLoaded] = useState<boolean>(false);
-  const [ scopes, setScopes ] = useState<string>("");
+  const [ isUserDetailsLoaded, setIsUserDetailsLoaded] = useState<boolean>(false);
+  const [ scopes, setScopes ] = useState<string[]>([]);
+  const [ groups, setGroups ] = useState<string[]>([])
   const [ displayName, setDisplayName ] = useState<string>("");
   const [ email, setEmail ] = useState<string>("");
 
   useEffect((() =>{
     if (state?.isAuthenticated) {
+
       const getData = async () => {
-
         const basicUserInfo = await getBasicUserInfo();
-        const accessToken = await getAccessToken();
-        const decodedAccessToken = await jwt(accessToken) as DecodedAccessTokenInterface;
-
         if (basicUserInfo.hasOwnProperty('displayName')) {
           setDisplayName(basicUserInfo.displayName);
         } else {
@@ -53,29 +29,39 @@ export const Dashboard = () => {
           setDisplayName(username);
         }
 
-        setEmail(basicUserInfo.username);
+        if (basicUserInfo.hasOwnProperty('groups')) {
+          setGroups(basicUserInfo.groups as string[]);
+        }
 
-        await setScopes(decodedAccessToken.scope);
-        setIsOrganizationLoaded(true);
+        setEmail(basicUserInfo.username);
+        setScopes(basicUserInfo.allowedScopes.split(" "));
+        setIsUserDetailsLoaded(true);
       };
       getData();
     }
   }), []);
 
-  if (scopes !== "") {
-    return (
-      {isOrganizationLoaded} &&
-      <>
-        < UserProvider user={{scopes: scopes, email: email, displayName: displayName }} >
-          <div>
-            <Layout />
-                <Route exact path="/issues" >
-                  <HomePage />
-                </Route >
-          </div>
-        </UserProvider >
-      </>
+  return (
+    {isUserDetailsLoaded}
+    ? (
+      < UserProvider user={
+          {
+            scopes: scopes,
+            groups: groups,
+            email: email,
+            displayName: displayName
+          }
+        }
+      >
+        <div>
+          <Layout />
+          <Route exact path="/issues" >
+            <HomePage />
+          </Route >
+        </div>
+      </UserProvider >
+    ) : (
+      <CircularProgress />
     )
-  }
-
+  )
 }
