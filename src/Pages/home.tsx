@@ -70,17 +70,20 @@ const HomePage = () => {
   const [ needRefresh, setNeedRefresh ] = useState<boolean>(true);
   const [ loadFailed, setLoadFailed ] = useState<boolean>(null);
   const [ scopeLoaded, setScopeLoaded ] = useState<boolean>(null);
+  const [ canClose, setCanClose ] = useState<boolean>(false);
 
   const [ openAlert, setOpenAlert ] = useState<boolean>(false);
   const [ alertMessage, setAlertMessage ] = useState<string>(undefined);
   const [ alertSeverity, setAlertSeverity ] = useState<any>(undefined);
 
   const data = useUser();
-  const scopes = useUser().scopes;
-  const canClose = scopes.includes(closePermission);
-  const groups: string[] = useUser().groups;
+  const scopes: string[] = useUser().scopes;
 
-  const appList = [{name: "Issue 1"},{name: "Issue 2"},{name: "Issue 3"}];
+  useEffect(() => {
+    if (scopes.includes(closePermission)){
+      setCanClose(true);
+    }
+  }, [scopes]);
 
   const getIssueList = async () => {
     try{
@@ -97,7 +100,6 @@ const HomePage = () => {
     }
 
  }
-
 
   useEffect(() => {
     
@@ -145,9 +147,9 @@ const HomePage = () => {
                                         setNeedRefresh={setNeedRefresh}
                                         canClose={canClose}
         />,
-    },
+      },
     ],
-    []
+    [canClose]
   );
 
   const handleClose = () => {
