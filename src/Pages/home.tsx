@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 import  { useAuthContext } from '@asgardeo/auth-react';
 import jwt from 'jwt-decode'
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
-import JSONModal from "../components/jsonModal";
+import JSONModal from "../components/JSONModal";
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import { grey } from '@mui/material/colors';
 import { SnackbarComponent } from "../components/snackbar";
@@ -11,6 +11,7 @@ import { SnackbarComponent } from "../components/snackbar";
 import Actions from '../components/actions';
 import { useUser } from '../providers/UserProvider';
 import { apiUrl, closePermission } from "../config";
+import CopyToClipboardButton from "../components/copy-to-clipboard";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -258,6 +259,7 @@ const HomePage = () => {
                 alignItems="center"
                 sx={{height:100}}>
                 <JSONModal title="User Info" buttonLabel="User Info" json={data}/>
+                < CopyToClipboardButton copyString={accessToken} />
             </Box>
 
         </Box>
@@ -296,6 +298,7 @@ const HomePage = () => {
             alignItems="center"
             sx={{height:100}}>
             <JSONModal title="Decoded ID Token" buttonLabel="Decoded ID Token" json={data}/>
+            < CopyToClipboardButton copyString={accessToken} />
         </Box>
       </Box>
         </>
