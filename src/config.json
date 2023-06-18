@@ -4,7 +4,17 @@
     "signInRedirectURL": "http://localhost:3000",
     "signOutRedirectURL": "http://localhost:3000",
     "issueAPI": {
+        "enabled": true,
         "url": "<api_url>",
+        "path": "/issues",
+        "createPermssion": "<create_issue>",
+        "listPermssion": "<list_issues>",
+        "closePermssion": "<close_issue>"
+    },
+    "myIssueAPI": {
+        "enabled": true,
+        "url": "<api_url>",
+        "path": "/my-issues",
         "createPermssion": "<create_issue>",
         "listPermssion": "<list_issues>",
         "closePermssion": "<close_issue>"

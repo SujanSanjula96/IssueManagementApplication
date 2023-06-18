@@ -35,10 +35,7 @@ export const JsonModal = (props: JsonModalInterface) => {
             <Button onClick={handleOpen} variant="contained" sx={{ mr: 3 }}>
                 {buttonLabel}
             </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-            >
+            <Modal open={open} onClose={handleClose}>
                 <Box sx={style}>
                     <Typography
                         id="modal-modal-title"

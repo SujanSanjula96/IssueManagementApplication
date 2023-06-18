@@ -1,9 +1,4 @@
-import {
-    Snackbar,
-    Alert,
-    AlertProps,
-    AlertColor
-} from '@mui/material';
+import { Snackbar, Alert, AlertProps, AlertColor } from '@mui/material';
 import { forwardRef } from 'react';
 
 interface SnackbarProps {

@@ -3,7 +3,7 @@ import { useAuthContext } from '@asgardeo/auth-react';
 import { useState } from 'react';
 import { Dialog, DialogActions, DialogTitle } from '@mui/material';
 import React from 'react';
-import { apiUrl, closePermission } from '../config';
+import { closePermission } from '../config';
 import { useUserContext } from '../providers/user-context-provider';
 
 const Actions = (props) => {
@@ -33,10 +33,7 @@ const Actions = (props) => {
 
     function DeleteDialog() {
         return (
-            <Dialog
-                open={openDialog}
-                onClose={handleDialogClose}
-            >
+            <Dialog open={openDialog} onClose={handleDialogClose}>
                 <DialogTitle id="alert-dialog-title">
                     {'Are you sure to close the issue?'}
                 </DialogTitle>
@@ -57,7 +54,8 @@ const Actions = (props) => {
                     status: 'Closed'
                 },
                 method: 'PATCH',
-                url: apiUrl + '/issues/' + props.params.row.id
+                url:
+                    props.baseUrl + '/' + props.path + '/' + props.params.row.id
             });
             props.setNeedRefresh(true);
             props.setAlertMessage('Issue closed successfully');
@@ -66,8 +64,8 @@ const Actions = (props) => {
             props.setAlertMessage('Failed to close the issue');
             props.setAlertSeverity('error');
         } finally {
-          props.setOpenAlert(true);
-          setOpenDialog(false);
+            props.setOpenAlert(true);
+            setOpenDialog(false);
         }
     };
 
@@ -95,7 +93,10 @@ const Actions = (props) => {
         );
     }
 
-    if (!props.canClose && props.params.row.status === 'Open') {
+    if (
+        !scopes.includes(closePermission) &&
+        props.params.row.status === 'Open'
+    ) {
         return (
             <>
                 <Box

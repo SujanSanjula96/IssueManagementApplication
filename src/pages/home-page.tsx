@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Header } from '../components/header';
 
-import { Route } from 'react-router-dom';
 import { useAuthContext } from '@asgardeo/auth-react';
 import { UserProvider } from '../providers/user-context-provider';
-import IssuePage from './issue-page';
 import { CircularProgress } from '@mui/material';
 import { Footer } from '../components/footer';
+import TabPanel from '../components/tab-panel';
 
 export interface IUserContext {
     scopes: string[];
@@ -66,9 +65,7 @@ export const HomePage = () => {
                 <Header />
                 <div className="App">
                     <div className="content">
-                        <Route exact path="/issues">
-                            <IssuePage />
-                        </Route>
+                        <TabPanel />
                     </div>
                     <Footer accessToken={accessToken} />
                 </div>

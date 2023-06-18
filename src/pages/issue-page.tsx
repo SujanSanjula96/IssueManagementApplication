@@ -14,7 +14,6 @@ import { grey } from '@mui/material/colors';
 import { SnackbarComponent } from '../components/snackbar';
 
 import Actions from '../components/actions';
-import { apiUrl } from '../config';
 import { ErrorPage } from '../components/error-page';
 
 const style = {
@@ -35,7 +34,12 @@ interface IssueInterface {
     status?: string;
 }
 
-const IssuePage = () => {
+interface IssuePageProps {
+    baseUrl: string;
+    path: string;
+}
+
+const IssuePage = (props: IssuePageProps) => {
     const { httpRequest } = useAuthContext();
 
     const [pageSize, setPageSize] = useState(5);
@@ -60,7 +64,7 @@ const IssuePage = () => {
     const getIssueList = async () => {
         try {
             const response = await httpRequest({
-                url: apiUrl + '/issues'
+                url: props.baseUrl + '/' + props.path
             });
             setResponseList(response.data);
         } catch (e) {
@@ -81,6 +85,8 @@ const IssuePage = () => {
                 renderCell: (params) => (
                     <Actions
                         params={params}
+                        baseUrl={props.baseUrl}
+                        path={props.path}
                         setOpenAlert={setOpenAlert}
                         setAlertMessage={setAlertMessage}
                         setAlertSeverity={setAlertSeverity}
@@ -102,7 +108,7 @@ const IssuePage = () => {
             await httpRequest({
                 data: { name: newIssue },
                 method: 'POST',
-                url: apiUrl + '/issues'
+                url: props.baseUrl + '/' + props.path
             });
             setNeedRefresh(true);
             setAlertMessage('Issue Created Successfully');
@@ -161,7 +167,7 @@ const IssuePage = () => {
 
     return !isLoading ? (
         !loadFailed ? (
-            <Box sx={{ mt: 2 }}>
+            <Box>
                 <Box
                     component="span"
                     display="flex"

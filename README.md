@@ -17,7 +17,6 @@
 10. Update the `APIUrl` to deployed API url.
 11. Run the application using
 
-
     ```
     npm install && npm start
     ```
