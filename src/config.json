@@ -1,16 +1,12 @@
 {
     "clientID": "",
-    "baseUrl": "https://api.asgardeo.io/t/sujan11",
+    "baseUrl": "https://api.asgardeo.io/t/<org>",
     "signInRedirectURL": "http://localhost:3000",
     "signOutRedirectURL": "http://localhost:3000",
-    "scope": [
-        "openid",
-        "profile",
-        "groups", 
-        "urn:sujan11:issueapivcr:create_issue",
-        "urn:sujan11:issueapivcr:close_issue",
-        "urn:sujan11:issueapivcr:list_issues"
-    ],
-    "APIUrl": "https://7311456e-0678-4009-aa78-55b72e1b3184-prod.e1-us-east-azure.choreoapis.dev/xylr/issueapi-vcr/1.0.0",
-    "closePermssion": "urn:sujan11:issueapivcr:close_issue"
+    "issueAPI": {
+        "url": "<api_url>",
+        "createPermssion": "<create_issue>",
+        "listPermssion": "<list_issues>",
+        "closePermssion": "<close_issue>"
+    }
 }

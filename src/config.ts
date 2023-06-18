@@ -5,10 +5,16 @@ export const authConfig = {
     signOutRedirectURL: config.signOutRedirectURL,
     clientID: config.clientID,
     baseUrl: config.baseUrl,
-    scope: config.scope,
-    resourceServerURLs: [ config.APIUrl ],
-    prompt: "consent"
+    scope: [
+        "openid",
+        "profile",
+        "groups",
+        config.issueAPI.createPermssion,
+        config.issueAPI.listPermssion,
+        config.issueAPI.closePermssion
+    ],
+    resourceServerURLs: [ config.issueAPI.url ],
 };
 
-export const apiUrl = config.APIUrl;
-export const closePermission = config.closePermssion;
+export const apiUrl = config.issueAPI.url;
+export const closePermission = config.issueAPI.closePermssion;
