@@ -1,4 +1,4 @@
-import React, {FunctionComponent, PropsWithChildren, useContext} from "react";
+import React, { FunctionComponent, PropsWithChildren, useContext } from 'react';
 
 const userContext = React.createContext(null);
 
@@ -17,13 +17,12 @@ export function useUserContext() {
     return useContext(userContext);
 }
 
-export const UserProvider : FunctionComponent<PropsWithChildren<IUserContextProps>> = 
-    ( props :  PropsWithChildren<IUserContextProps>) => {
-
+export const UserProvider: FunctionComponent<
+    PropsWithChildren<IUserContextProps>
+> = (props: PropsWithChildren<IUserContextProps>) => {
     return (
-        <userContext.Provider value={props.user} >
-            { props.children }
+        <userContext.Provider value={props.user}>
+            {props.children}
         </userContext.Provider>
     );
-
-}
+};

@@ -1,37 +1,42 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/login-page';
-import { HomePage } from "./pages/home-page";
-import { AuthProvider, SecureRoute, useAuthContext } from '@asgardeo/auth-react';
-import { useHistory } from "react-router-dom"
+import { HomePage } from './pages/home-page';
+import {
+    AuthProvider,
+    SecureRoute,
+    useAuthContext
+} from '@asgardeo/auth-react';
+import { useHistory } from 'react-router-dom';
 import { authConfig } from './config';
 
 const SecureRedirect = (props) => {
-  const { component, path } = props;
-  const { signIn } = useAuthContext();
-  const history = useHistory();
+    const { component, path } = props;
+    const { signIn } = useAuthContext();
+    const history = useHistory();
 
-  const callback = () => {
-    history.push("/");
-  };
+    const callback = () => {
+        history.push('/');
+    };
 
-  return (<SecureRoute path={path} component={component} callback={callback} />);
+    return (
+        <SecureRoute path={path} component={component} callback={callback} />
+    );
 };
 
 function App() {
-  return (
-    <div className="App">
-      <AuthProvider config={ authConfig }>
-        <Router>
-            <Route exact path="/" >
-              <LoginPage />
-            </Route >
-            <SecureRedirect path="/issues" component={HomePage} />
-        </Router>
-      </AuthProvider>
-    </div>
-  );
+    return (
+        <div className="App">
+            <AuthProvider config={authConfig}>
+                <Router>
+                    <Route exact path="/">
+                        <LoginPage />
+                    </Route>
+                    <SecureRedirect path="/issues" component={HomePage} />
+                </Router>
+            </AuthProvider>
+        </div>
+    );
 }
 
 export default App;
-

@@ -1,4 +1,4 @@
-import config from "./config.json";
+import config from './config.json';
 
 export const authConfig = {
     signInRedirectURL: config.signInRedirectURL,
@@ -6,14 +6,14 @@ export const authConfig = {
     clientID: config.clientID,
     baseUrl: config.baseUrl,
     scope: [
-        "openid",
-        "profile",
-        "groups",
+        'openid',
+        'profile',
+        'groups',
         config.issueAPI.createPermssion,
         config.issueAPI.listPermssion,
         config.issueAPI.closePermssion
     ],
-    resourceServerURLs: [ config.issueAPI.url ],
+    resourceServerURLs: [config.issueAPI.url]
 };
 
 export const apiUrl = config.issueAPI.url;
