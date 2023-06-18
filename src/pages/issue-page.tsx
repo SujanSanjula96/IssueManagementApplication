@@ -6,7 +6,6 @@ import {
     Button,
     CircularProgress,
     Modal,
-    Table,
     TextField,
     Typography
 } from '@mui/material';
@@ -100,7 +99,7 @@ const IssuePage = () => {
 
     const handleCreate = async () => {
         try {
-            const response = await httpRequest({
+            await httpRequest({
                 data: { name: newIssue },
                 method: 'POST',
                 url: apiUrl + '/issues'

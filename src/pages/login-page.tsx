@@ -11,7 +11,7 @@ function LoginPage() {
     const history = useHistory();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const { state, signIn, signOut, on } = useAuthContext();
+    const { state, signIn } = useAuthContext();
 
     useEffect(() => {
         if (!state?.isAuthenticated) {

@@ -1,12 +1,10 @@
 import {
     Snackbar,
-    Button,
     Alert,
     AlertProps,
-    AlertColor,
-    Slide
+    AlertColor
 } from '@mui/material';
-import { useState, forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 interface SnackbarProps {
     openAlert?: boolean;

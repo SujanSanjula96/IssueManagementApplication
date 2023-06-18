@@ -1,18 +1,13 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import LoginPage from './pages/login-page';
 import { HomePage } from './pages/home-page';
-import {
-    AuthProvider,
-    SecureRoute,
-    useAuthContext
-} from '@asgardeo/auth-react';
+import { AuthProvider,  SecureRoute } from '@asgardeo/auth-react';
 import { useHistory } from 'react-router-dom';
 import { authConfig } from './config';
 
 const SecureRedirect = (props) => {
     const { component, path } = props;
-    const { signIn } = useAuthContext();
     const history = useHistory();
 
     const callback = () => {

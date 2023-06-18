@@ -13,6 +13,8 @@ const Actions = (props) => {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
+    const open = Boolean(anchorEl);
+
     const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -20,8 +22,6 @@ const Actions = (props) => {
     const handlePopoverClose = () => {
         setAnchorEl(null);
     };
-
-    const open = Boolean(anchorEl);
 
     const handleDialogOpen = () => {
         setOpenDialog(true);
@@ -52,7 +52,7 @@ const Actions = (props) => {
 
     const handleDelete = async () => {
         try {
-            const response = await httpRequest({
+            await httpRequest({
                 data: {
                     status: 'Closed'
                 },
@@ -62,13 +62,12 @@ const Actions = (props) => {
             props.setNeedRefresh(true);
             props.setAlertMessage('Issue closed successfully');
             props.setAlertSeverity('success');
-            props.setOpenAlert(true);
-            setOpenDialog(false);
         } catch (e) {
             props.setAlertMessage('Failed to close the issue');
             props.setAlertSeverity('error');
-            props.setOpenAlert(true);
-            setOpenDialog(false);
+        } finally {
+          props.setOpenAlert(true);
+          setOpenDialog(false);
         }
     };
 
