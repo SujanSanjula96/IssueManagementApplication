@@ -13,7 +13,7 @@ interface IUserContext {
     displayName: string;
 }
 
-export function useUser() {
+export function useUserContext() {
     return useContext(userContext);
 }
 

@@ -7,7 +7,7 @@ import { useAuthContext } from "@asgardeo/auth-react";
 import { useEffect, useState } from "react";
 import { CircularProgress } from '@mui/material';
 
-function Login() {
+function LoginPage() {
 
   const history = useHistory();
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
@@ -89,4 +89,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

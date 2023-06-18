@@ -3,13 +3,13 @@ import { useEffect, useState, useMemo } from "react";
 import  { useAuthContext } from '@asgardeo/auth-react';
 import jwt from 'jwt-decode'
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
-import JSONModal from "../components/JSONModal";
+import { JsonModal } from "../components/json-modal";
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import { grey } from '@mui/material/colors';
 import { SnackbarComponent } from "../components/snackbar";
 
 import Actions from '../components/actions';
-import { useUser } from '../providers/UserProvider';
+import { useUserContext } from '../providers/user-context-provider';
 import { apiUrl, closePermission } from "../config";
 import CopyToClipboardButton from "../components/copy-to-clipboard";
 
@@ -31,11 +31,6 @@ interface IssueInterface {
   status?: string;
 }
 
-interface OrganizationInterface {
-  handle?: string,
-  uuid?: string
-}
-
 interface AccessTokenInterface {
   sub: string;
   aut: string;
@@ -53,7 +48,7 @@ interface AccessTokenInterface {
   username: string;
 }
 
-const HomePage = () => {
+const IssuePage = () => {
 
     const [pageSize, setPageSize] = useState(5);
 
@@ -76,8 +71,8 @@ const HomePage = () => {
   const [ alertMessage, setAlertMessage ] = useState<string>(undefined);
   const [ alertSeverity, setAlertSeverity ] = useState<any>(undefined);
 
-  const data = useUser();
-  const scopes: string[] = useUser().scopes;
+  const data = useUserContext();
+  const scopes: string[] = useUserContext().scopes;
 
   useEffect(() => {
     if (scopes.includes(closePermission)){
@@ -116,7 +111,7 @@ const HomePage = () => {
       const getData = async () => {
         const accessToken = await getAccessToken();
         const decodedAccessToken = jwt(accessToken) as AccessTokenInterface;
-        const decodedIDToken = await getDecodedIDToken();//jwt(accessTokenIDP);
+        const decodedIDToken = await getDecodedIDToken();
         setAccessToken(accessToken);
         setDecodedAccessToken(decodedAccessToken);
         setDecodedIDToken(decodedIDToken);
@@ -260,7 +255,7 @@ const HomePage = () => {
                 justifyContent="center"
                 alignItems="center"
                 sx={{height:100}}>
-                <JSONModal title="User Info" buttonLabel="User Info" json={data}/>
+                <JsonModal title="User Info" buttonLabel="User Info" json={data}/>
                 < CopyToClipboardButton copyString={accessToken} />
             </Box>
 
@@ -299,7 +294,7 @@ const HomePage = () => {
             justifyContent="center"
             alignItems="center"
             sx={{height:100}}>
-            <JSONModal title="Decoded ID Token" buttonLabel="Decoded ID Token" json={data}/>
+            <JsonModal title="Decoded ID Token" buttonLabel="Decoded ID Token" json={data}/>
             < CopyToClipboardButton copyString={accessToken} />
         </Box>
       </Box>
@@ -309,4 +304,4 @@ const HomePage = () => {
   }
 };
 
-export default HomePage;
+export default IssuePage;

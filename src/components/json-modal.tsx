@@ -17,13 +17,13 @@ const style = {
   p: 4,
 };
 
-interface JSONModalInterface {
+interface JsonModalInterface {
   title: string;
   buttonLabel: string;
   json: any;
 };
 
-export default function JSONModal( props: JSONModalInterface ) {
+export const JsonModal = ( props: JsonModalInterface ) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

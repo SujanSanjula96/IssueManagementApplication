@@ -1,11 +1,10 @@
-import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Login from './Pages/Login';
-import Providers from './providers';
-import { Dashboard } from "./layout/dashboard";
-import { SecureRoute, useAuthContext } from '@asgardeo/auth-react';
+import LoginPage from './pages/login-page';
+import { HomePage } from "./pages/home-page";
+import { AuthProvider, SecureRoute, useAuthContext } from '@asgardeo/auth-react';
 import { useHistory } from "react-router-dom"
+import { authConfig } from './config';
 
 const SecureRedirect = (props) => {
   const { component, path } = props;
@@ -22,14 +21,14 @@ const SecureRedirect = (props) => {
 function App() {
   return (
     <div className="App">
-      <Providers>
+      <AuthProvider config={ authConfig }>
         <Router>
             <Route exact path="/" >
-              <Login />
+              <LoginPage />
             </Route >
-            <SecureRedirect path="/issues" component={Dashboard} />
+            <SecureRedirect path="/issues" component={HomePage} />
         </Router>
-      </Providers>
+      </AuthProvider>
     </div>
   );
 }

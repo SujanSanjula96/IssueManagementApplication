@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Layout } from './layout';
+import { Header } from '../components/header';
 
 import { Route } from 'react-router-dom';
 import  { useAuthContext } from '@asgardeo/auth-react';
-import { UserProvider } from '../providers/UserProvider';
-import HomePage from '../Pages/home';
+import { UserProvider } from '../providers/user-context-provider';
+import IssuePage from './issue-page';
 import { CircularProgress } from '@mui/material';
 
-export const Dashboard = () => {
+export interface IUserContext {
+  scopes: string[];
+  groups: string[];
+  email: string;
+  displayName: string;
+}
+
+export const HomePage = () => {
 
   const { state, getBasicUserInfo} = useAuthContext();
 
@@ -54,9 +61,9 @@ export const Dashboard = () => {
         }
       >
         <div>
-          <Layout />
+          <Header userDisplayName={displayName} />
           <Route exact path="/issues" >
-            <HomePage />
+            <IssuePage />
           </Route >
         </div>
       </UserProvider >
