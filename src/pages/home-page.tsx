@@ -6,6 +6,7 @@ import  { useAuthContext } from '@asgardeo/auth-react';
 import { UserProvider } from '../providers/user-context-provider';
 import IssuePage from './issue-page';
 import { CircularProgress } from '@mui/material';
+import { Footer } from '../components/footer';
 
 export interface IUserContext {
   scopes: string[];
@@ -16,18 +17,22 @@ export interface IUserContext {
 
 export const HomePage = () => {
 
-  const { state, getBasicUserInfo} = useAuthContext();
+  const { state, getAccessToken, getBasicUserInfo} = useAuthContext();
 
   const [ isUserDetailsLoaded, setIsUserDetailsLoaded] = useState<boolean>(false);
   const [ scopes, setScopes ] = useState<string[]>([]);
   const [ groups, setGroups ] = useState<string[]>([])
   const [ displayName, setDisplayName ] = useState<string>("");
   const [ email, setEmail ] = useState<string>("");
+  const [ accessToken, setAccessToken ] = useState<string>("");
 
   useEffect((() =>{
     if (state?.isAuthenticated) {
 
       const getData = async () => {
+        const accessToken = await getAccessToken();
+        setAccessToken(accessToken);
+
         const basicUserInfo = await getBasicUserInfo();
         if (basicUserInfo.hasOwnProperty('displayName')) {
           setDisplayName(basicUserInfo.displayName);
@@ -61,10 +66,15 @@ export const HomePage = () => {
         }
       >
         <div>
-          <Header userDisplayName={displayName} />
-          <Route exact path="/issues" >
-            <IssuePage />
-          </Route >
+          <Header />
+          <div className="App">
+            <div className="content">
+              <Route exact path="/issues" >
+                  <IssuePage/>
+              </Route >
+            </div>
+            <Footer accessToken={accessToken} />
+          </div>
         </div>
       </UserProvider >
     ) : (

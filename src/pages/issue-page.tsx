@@ -1,17 +1,14 @@
 import { useEffect, useState, useMemo } from "react";
 
 import  { useAuthContext } from '@asgardeo/auth-react';
-import jwt from 'jwt-decode'
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
-import { JsonModal } from "../components/json-modal";
+import { Box, Button, CircularProgress, Modal, Table, TextField, Typography } from "@mui/material";
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import { grey } from '@mui/material/colors';
 import { SnackbarComponent } from "../components/snackbar";
 
 import Actions from '../components/actions';
-import { useUserContext } from '../providers/user-context-provider';
-import { apiUrl, closePermission } from "../config";
-import CopyToClipboardButton from "../components/copy-to-clipboard";
+import { apiUrl } from "../config";
+import { ErrorPage } from "../components/error-page";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -31,98 +28,41 @@ interface IssueInterface {
   status?: string;
 }
 
-interface AccessTokenInterface {
-  sub: string;
-  aut: string;
-  iss: string;
-  groups: [];
-  given_name: string;
-  client_id: string;
-  aud: string;
-  nbf: number;
-  azp: string;
-  scope: string;
-  exp: number;
-  iat: number;
-  jti: string;
-  username: string;
-}
-
 const IssuePage = () => {
 
-    const [pageSize, setPageSize] = useState(5);
+  const { httpRequest } = useAuthContext();
 
-  const { state, getDecodedIDToken, getAccessToken, httpRequest, getDecodedIDPIDToken } = useAuthContext();
-
-  const [ decodedAccessToken, setDecodedAccessToken ] = useState<any>();
-  const [ accessToken, setAccessToken ] = useState<any>();
-  const [ decodedIDToken, setDecodedIDToken ] = useState<any>();
-  const [ isOrganizationLoaded, setIsOrganizationLoaded] = useState<boolean>(false);
+  const [pageSize, setPageSize] = useState(5);
   const [ responseList, setResponseList ] = useState<IssueInterface[]>([]);
-  const [ isLoaded, setIsLoaded ] = useState<boolean>(false);
+  const [ isLoading, setIsLoading ] = useState<boolean>(true);
   const [ openNewIssue, setOpenNewIssue ] = useState<boolean>(false);
   const [ newIssue,  setNewIssue ] = useState<string>("");
   const [ needRefresh, setNeedRefresh ] = useState<boolean>(true);
   const [ loadFailed, setLoadFailed ] = useState<boolean>(null);
-  const [ scopeLoaded, setScopeLoaded ] = useState<boolean>(null);
-  const [ canClose, setCanClose ] = useState<boolean>(false);
 
   const [ openAlert, setOpenAlert ] = useState<boolean>(false);
   const [ alertMessage, setAlertMessage ] = useState<string>(undefined);
   const [ alertSeverity, setAlertSeverity ] = useState<any>(undefined);
 
-  const data = useUserContext();
-  const scopes: string[] = useUserContext().scopes;
-
   useEffect(() => {
-    if (scopes.includes(closePermission)){
-      setCanClose(true);
+    if (needRefresh){
+      getIssueList();
+      setNeedRefresh(false);
     }
-  }, [scopes]);
+  }, [needRefresh]);
 
   const getIssueList = async () => {
     try{
         const response = await httpRequest({
           url: apiUrl + "/issues",
       });
-
-      const tempList = response.data;
-
-      setResponseList(tempList);
-      setIsLoaded(true);
+      setResponseList(response.data);
     } catch (e) {
       setLoadFailed(true);
+    } finally {
+      setIsLoading(false);
     }
-
  }
-
-  useEffect(() => {
-    
-    if (needRefresh){
-      getIssueList();
-      setNeedRefresh(false);
-    }
-    
-
-  }, [needRefresh]);
-
-  useEffect(() =>{
-    if (state?.isAuthenticated) {
-      const getData = async () => {
-        const accessToken = await getAccessToken();
-        const decodedAccessToken = jwt(accessToken) as AccessTokenInterface;
-        const decodedIDToken = await getDecodedIDToken();
-        setAccessToken(accessToken);
-        setDecodedAccessToken(decodedAccessToken);
-        setDecodedIDToken(decodedIDToken);
-        setIsOrganizationLoaded(true);
-        
-      };
-      getData();
-
-  }
-  }, []);
-
 
   const columns = useMemo(
     () => [
@@ -135,24 +75,20 @@ const IssuePage = () => {
         headerName: 'Status',
         type: 'actions',
         flex: 1,
-        renderCell: (params) => <Actions params={params}
-                                        setOpenAlert={setOpenAlert}
-                                        setAlertMessage={setAlertMessage}
-                                        setAlertSeverity={setAlertSeverity}
-                                        setNeedRefresh={setNeedRefresh}
-                                        canClose={canClose}
-        />,
+        renderCell: (params) => 
+          <Actions params={params}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+            setAlertSeverity={setAlertSeverity}
+            setNeedRefresh={setNeedRefresh}
+          />,
       },
-    ],
-    [canClose]
+    ], []
   );
 
   const handleClose = () => {
+    setNewIssue("");
     setOpenNewIssue(false);
-  }
-
-  const handleChange = e => {
-    setNewIssue(e.target.value);
   }
 
   const handleCreate = async () => {
@@ -163,145 +99,108 @@ const IssuePage = () => {
         url: apiUrl + "/issues",
       });
       setNeedRefresh(true);
-      setNewIssue("");
-      setOpenNewIssue(false);
       setAlertMessage("Issue Created Successfully");
       setAlertSeverity('success');
-      setOpenAlert(true);
     } catch (e) {
-      setNewIssue("");
-      setOpenNewIssue(false);
       setAlertMessage("Failed to create the issue");
       setAlertSeverity('error');
+    } finally {
+      setNewIssue("");
+      setOpenNewIssue(false);
       setOpenAlert(true);
     }
-
   }
-  
-  if (isLoaded) {
-  return ( 
-    {isOrganizationLoaded} && {isLoaded} && {scopeLoaded} &&
-    <Box sx={{mt:2}}>
-        <Box component="span"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{width:"100%"}}>
-            <Box m={2} sx={{width:"100%",  height:500} }>
-                <Button variant='contained' sx={{mt:3}} onClick={() => {setOpenNewIssue(true)}} >
-                    + New Issue
-                </Button>
-                <Box m={2}>
-                    <DataGrid
-                        columns={columns}
-                        rows={responseList}
-                        getRowId={(row) => row.id}
-                        rowsPerPageOptions={[5, 10, 20]}
-                        pageSize={pageSize}
-                        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                        getRowSpacing={(params) => ({
-                        top: params.isFirstVisible ? 0 : 5,
-                        bottom: params.isLastVisible ? 0 : 5,
-                        })}
-                        sx={{
-                        display: 'flex',
-                        [`& .${gridClasses.row}`]: {
-                            bgcolor: (theme) =>
-                            theme.palette.mode === 'light' ? grey[200] : grey[900],
-                        },
-                        width: "100%",
-                        height: 350
-                        }}
-                    />
-                </Box>
-            </Box>
-        </Box>
 
-        <Modal
-          open={openNewIssue}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style} >
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Create New Issue
-            </Typography>
-            <TextField
-            required
-            id="outlined-required"
-            value={newIssue}
-            label="Issue"
-            onChange={handleChange}
-            sx={{
-              width: 300, mt:2, mb:3
-            }}
-            />
-            <Box>
-              <Button variant="contained" sx={{mr:2}} onClick={handleCreate}>
-                Create
-              </Button>
-              <Button onClick={handleClose}>
-                Cancel
-              </Button> 
-            </Box>
-          </Box>
-        </Modal>
-
-        <Box sx={{backgroundColor:'#eeeeee'}}>
-
-            <Box component="span"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                sx={{height:100}}>
-                <JsonModal title="User Info" buttonLabel="User Info" json={data}/>
-                < CopyToClipboardButton copyString={accessToken} />
-            </Box>
-
-        </Box>
-        <SnackbarComponent
-          openAlert={openAlert} 
-          setOpenAlert={setOpenAlert} 
-          message={alertMessage}
-          severity={alertSeverity}
-        />
-    </Box>
-    
-
+  const NewIssueButton = () => (
+    <div className="left-container">
+      <Button variant='contained' sx={{mt:3}} onClick={() => {setOpenNewIssue(true)}} >
+          + New Issue
+      </Button>
+    </div>
   );
-          } 
-  if (loadFailed) {
-    return(
-      <>
-      <Box sx={{backgroundColor:'#eeeeee'}}>
 
-      <Box component="span"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{height:100,mt:5}}>
-            <Typography variant="h4">
-              You are not Authorized!
-            </Typography>
-      </Box>
-      </Box>
+  const IssueList = () => (
+    <Box m={2}>
+      <DataGrid
+          columns={columns}
+          rows={responseList}
+          getRowId={(row) => row.id}
+          rowsPerPageOptions={[5, 10, 20]}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          getRowSpacing={(params) => ({
+          top: params.isFirstVisible ? 0 : 5,
+          bottom: params.isLastVisible ? 0 : 5,
+          })}
+          sx={{
+          display: 'flex',
+          [`& .${gridClasses.row}`]: {
+              bgcolor: (theme) =>
+              theme.palette.mode === 'light' ? grey[200] : grey[900],
+          },
+          width: "100%",
+          height: 350
+          }}
+      />
+    </Box>
+  );
 
-      <Box sx={{backgroundColor:'#eeeeee', mt:10}}>
-
-        <Box component="span"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{height:100}}>
-            <JsonModal title="Decoded ID Token" buttonLabel="Decoded ID Token" json={data}/>
-            < CopyToClipboardButton copyString={accessToken} />
+  return (
+    !isLoading ? (
+      !loadFailed ? (
+        <Box sx={{mt:2}}>
+          <Box component="span"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{width:"100%"}}>
+              <Box m={2} sx={{width:"100%",  height:500} }>
+                  <NewIssueButton />
+                  <IssueList />
+              </Box>
+          </Box>
+          <Modal
+            open={openNewIssue}
+            onClose={handleClose}
+          >
+            <Box sx={style} >
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Create New Issue
+              </Typography>
+              <TextField
+                required
+                id="outlined-required"
+                value={newIssue}
+                label="Issue"
+                onChange={e => setNewIssue(e.target.value)}
+                sx={{
+                  width: 300, mt:2, mb:3
+                }}
+              />
+              <Box>
+                <Button variant="contained" sx={{mr:2}} onClick={handleCreate}>
+                  Create
+                </Button>
+                <Button onClick={handleClose}>
+                  Cancel
+                </Button> 
+              </Box>
+            </Box>
+          </Modal>
+          <SnackbarComponent
+            openAlert={openAlert} 
+            setOpenAlert={setOpenAlert} 
+            message={alertMessage}
+            severity={alertSeverity}
+          />
         </Box>
-      </Box>
-        </>
-  
+      ) : (
+        <ErrorPage />
+      )
+    ) : (
+      <CircularProgress sx={{mt:15}} />
     )
-  }
+  );
 };
 
 export default IssuePage;

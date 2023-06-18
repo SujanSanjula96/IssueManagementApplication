@@ -7,17 +7,13 @@ import {
     Stack,
     Avatar
   } from '@mui/material';
-
 import { useAuthContext } from '@asgardeo/auth-react';
+import { useUserContext } from '../providers/user-context-provider';
 
-interface HeaderProps {
-  userDisplayName: string;
-}
-
-export const Header = (props: HeaderProps) => {
+export const Header = () => {
 
   const { signOut } = useAuthContext();
-  const displayName = props.userDisplayName;
+  const displayName = useUserContext().displayName;
 
   return (
     <AppBar position='static' color='transparent' sx={{height:75}}>

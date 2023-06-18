@@ -3,12 +3,14 @@ import { useAuthContext } from '@asgardeo/auth-react';
 import { useState } from 'react';
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import React from 'react';
-import { apiUrl } from '../config';
+import { apiUrl, closePermission } from '../config';
+import { useUserContext } from '../providers/user-context-provider';
 
 
 const Actions = ( props ) => {
 
   const { httpRequest } = useAuthContext();
+  const scopes = useUserContext().scopes;
 
   const [ openDialog, setOpenDialog ] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -77,7 +79,7 @@ const Actions = ( props ) => {
 
   }
 
-  if ( props.canClose && props.params.row.status === "Open" ) {
+  if ( scopes.includes(closePermission) && props.params.row.status === "Open" ) {
     return (
       <Box>
         <Tooltip title="Close the issue">

@@ -1,5 +1,23 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh;
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.left-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 20px;
+}
+
+.MuiButton {
+  color: 'white';
+  background-color: '#ff7300';
 }
 
 .App-logo {
