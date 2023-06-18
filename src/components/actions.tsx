@@ -36,8 +36,6 @@ const Actions = (props) => {
             <Dialog
                 open={openDialog}
                 onClose={handleDialogClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
                     {'Are you sure to close the issue?'}
