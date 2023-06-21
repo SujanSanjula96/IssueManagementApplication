@@ -22,8 +22,13 @@ export const authConfig = {
 export const allIssuesEnabled = config.issueAPI.enabled;
 export const allIssueAPIUrl = config.issueAPI.url;
 export const allIssueAPIPath = config.issueAPI.path;
-export const closePermission = config.issueAPI.closePermssion;
+export const allIssuesCreatePermission = config.issueAPI.createPermssion;
+export const allIssuesViewPermission = config.issueAPI.listPermssion;
+export const allIssuesClosePermission = config.issueAPI.closePermssion;
 
 export const myIssuesEnabled = config.myIssueAPI.enabled;
 export const myIssueAPIUrl = config.myIssueAPI.url;
 export const myIssueApiPath = config.myIssueAPI.path;
+export const myIssuesCreatePermission = config.myIssueAPI.createPermssion;
+export const myIssuesViewPermission = config.myIssueAPI.listPermssion;
+export const myIssuesClosePermission = config.myIssueAPI.closePermssion;

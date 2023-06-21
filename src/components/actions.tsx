@@ -3,7 +3,6 @@ import { useAuthContext } from '@asgardeo/auth-react';
 import { useState } from 'react';
 import { Dialog, DialogActions, DialogTitle } from '@mui/material';
 import React from 'react';
-import { closePermission } from '../config';
 import { useUserContext } from '../providers/user-context-provider';
 
 const Actions = (props) => {
@@ -70,7 +69,7 @@ const Actions = (props) => {
     };
 
     if (
-        scopes.includes(closePermission) &&
+        scopes.includes(props.closePermission) &&
         props.params.row.status === 'Open'
     ) {
         return (
@@ -94,7 +93,7 @@ const Actions = (props) => {
     }
 
     if (
-        !scopes.includes(closePermission) &&
+        !scopes.includes(props.closePermission) &&
         props.params.row.status === 'Open'
     ) {
         return (

@@ -15,6 +15,8 @@ import { SnackbarComponent } from '../components/snackbar';
 
 import Actions from '../components/actions';
 import { ErrorPage } from '../components/error-page';
+import { PermissionInterface } from '../components/tab-panel';
+import { useUserContext } from '../providers/user-context-provider';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -37,6 +39,7 @@ interface IssueInterface {
 interface IssuePageProps {
     baseUrl: string;
     path: string;
+    permissions: PermissionInterface;
 }
 
 const IssuePage = (props: IssuePageProps) => {
@@ -53,6 +56,9 @@ const IssuePage = (props: IssuePageProps) => {
     const [openAlert, setOpenAlert] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState<string>(undefined);
     const [alertSeverity, setAlertSeverity] = useState<any>(undefined);
+
+    const userContext = useUserContext();
+    const userScopes = userContext.scopes;
 
     useEffect(() => {
         if (needRefresh) {
@@ -91,6 +97,7 @@ const IssuePage = (props: IssuePageProps) => {
                         setAlertMessage={setAlertMessage}
                         setAlertSeverity={setAlertSeverity}
                         setNeedRefresh={setNeedRefresh}
+                        closePermission={props.permissions.closeIssue}
                     />
                 )
             }
@@ -176,7 +183,9 @@ const IssuePage = (props: IssuePageProps) => {
                     sx={{ width: '100%' }}
                 >
                     <Box m={2} sx={{ width: '100%', height: 500 }}>
-                        <NewIssueButton />
+                        {
+                            userScopes.includes(props.permissions.createIssue) && <NewIssueButton />
+                        }
                         <IssueList />
                     </Box>
                 </Box>
